@@ -1,0 +1,42 @@
+scalar Date
+
+type Query {
+    getTimeline: [Timeline]!
+    getBoard: [Board]!
+}
+
+type Mutation {
+    post(message: String!): Boolean!
+    follow(id: ID!): Boolean!
+}
+
+type User {
+    id: ID!
+    subject: String!
+    username: String!
+    follows: [Follow]!
+    posts: [Post]!
+}
+
+type Post {
+    id: ID!
+    message: String!
+    creationDate: Date!
+}
+
+type Follow {
+    id: ID!
+    dateOfFollowing: Date!
+    follower: User!
+    follows: User!
+}
+
+type Timeline {
+    user: User!
+    post: Post!
+}
+
+type Board {
+    user: User!
+    isFollowing: Boolean!
+}

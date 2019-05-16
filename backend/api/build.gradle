@@ -1,0 +1,10 @@
+dependencies {
+    implementation project(':core')
+
+    // GraphQL
+    implementation "com.graphql-java-kickstart:graphql-spring-boot-starter:${v_graphql}"
+    implementation "com.graphql-java-kickstart:graphiql-spring-boot-starter:${v_graphql}"
+    implementation "com.graphql-java-kickstart:graphql-java-tools:${v_graphql_tools}"
+    implementation "com.zhokhov.graphql:graphql-datetime-spring-boot-starter:${v_graphql_datetime}"
+    testImplementation "com.graphql-java-kickstart:graphql-spring-boot-starter-test:${v_graphql}"
+}

@@ -1,42 +1,94 @@
 scalar Date
 
 type Query {
-    getTimeline: [Timeline]!
-    getBoard: [Board]!
+    getTimelineFromUserUseCase(input: GetTimelineFromUserInput!): GetTimelineFromUserPayload
+    getUserListWithFollowStatus(input: GetUserListWithFollowStatusInput!): GetUserListWithFollowStatusPayload
 }
 
 type Mutation {
-    post(message: String!): Boolean!
-    follow(id: ID!): Boolean!
+    createUser(input: CreateUserInput!): CreateUserPayload
+    postMessage(input: PostMessageInput!): PostMessagePayload
+    followUser(input: FollowUserInput!): FollowUserPayload
+    unfollowUser(input: UnfollowUserInput!): UnfollowUserPayload
 }
 
-type User {
-    id: ID!
-    subject: String!
-    username: String!
-    follows: [Follow]!
-    posts: [Post]!
+type UserListItem {
+    user: User!
+    isFollowing: Boolean!
 }
 
 type Post {
-    id: ID!
+    id: Int!
     message: String!
     creationDate: Date!
 }
 
-type Follow {
-    id: ID!
-    dateOfFollowing: Date!
-    follower: User!
-    follows: User!
+type User {
+    id: Int!
+    username: String!
 }
 
-type Timeline {
-    user: User!
+type TimelineItem {
     post: Post!
+    user: User!
 }
 
-type Board {
-    user: User!
-    isFollowing: Boolean!
+input CreateUserInput {
+    username: String!
+}
+
+input PostMessageInput {
+    userId: Int!
+    message: String!
+}
+
+input FollowUserInput {
+    followingUserId: Int!
+    followedUserId: Int!
+}
+
+input UnfollowUserInput {
+    followingUserId: Int!
+    followedUserId: Int!
+}
+
+input GetTimelineFromUserInput {
+    userId: Int!
+}
+
+input GetUserListWithFollowStatusInput {
+    userId: Int!
+}
+
+type CreateUserPayload {
+    userId: Int
+    username: String
+}
+
+type PostMessagePayload {
+    postId: Int
+    message: String
+    author: User
+}
+
+type FollowUserPayload {
+    following: User
+    followed: User
+    followRelationshipId: Int
+}
+
+type UnfollowUserPayload {
+    following: User
+    followed: User
+    deletedFollowRelationshipId: Int
+}
+
+type GetTimelineFromUserPayload {
+    userId: Int
+    posts: [TimelineItem]
+}
+
+type GetUserListWithFollowStatusPayload {
+    userId: Int
+    otherUsersWithFollowStatus: [UserListItem]
 }

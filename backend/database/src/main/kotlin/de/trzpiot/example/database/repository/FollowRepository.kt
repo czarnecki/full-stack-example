@@ -8,8 +8,11 @@ import org.springframework.stereotype.Repository
 
 @Repository
 internal interface FollowRepository : Neo4jRepository<FollowRelationship, Long> {
-    @Query("MATCH (u1:UserNode)-[r:IS_FOLLOWING]->(u2:UserNode) WHERE ID(u1) = {followingUserId} AND ID(u2) = {followedUserId} " +
-            "RETURN CASE WHEN r IS NOT NULL THEN true ELSE false END AS isFollowing")
+    @Query("MATCH (u1:UserNode) WHERE ID(u1) = {followingUserId} " +
+            "MATCH (u2:UserNode) WHERE ID(u2) = {followedUserId} " +
+            "RETURN CASE WHEN (u1)-[:IS_FOLLOWING]->(u2) " +
+            "THEN true ELSE false " +
+            "END AS isFollowing")
     fun isFollowing(@Param("followingUserId") followingUserId: Long, @Param("followedUserId") followedUserId: Long): Boolean
 
     @Query("MATCH (u1:UserNode)-[r:IS_FOLLOWING]->(u2:UserNode) WHERE ID(u1) = {followingUserId} AND ID(u2) = {followedUserId} RETURN u1, u2, r")

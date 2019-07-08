@@ -8,15 +8,15 @@ import java.util.*
 
 
 @RelationshipEntity(type = "IS_FOLLOWING")
-internal data class Follow(
+internal data class FollowRelationship(
         var id: Long? = null,
 
         @DateLong
         var dateOfFollowing: Date,
 
         @StartNode
-        var follower: User,
+        var follower: UserNode,
 
         @EndNode
-        var follows: User
+        var follows: UserNode
 )

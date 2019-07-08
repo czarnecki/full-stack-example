@@ -5,13 +5,13 @@ import org.neo4j.ogm.annotation.Relationship
 import org.neo4j.ogm.annotation.Relationship.OUTGOING
 
 @NodeEntity
-internal data class User(
+internal data class UserNode(
         var id: Long? = null,
         var username: String,
 
         @Relationship(direction = OUTGOING)
-        var follows: MutableList<Follow> = mutableListOf(),
+        var follows: MutableList<FollowRelationship> = mutableListOf(),
 
         @Relationship(value = "HAS_WRITTEN", direction = OUTGOING)
-        var posts: MutableList<Post> = mutableListOf()
+        var posts: MutableList<PostNode> = mutableListOf()
 )

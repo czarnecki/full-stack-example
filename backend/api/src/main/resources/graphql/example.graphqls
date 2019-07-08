@@ -61,34 +61,30 @@ input GetUserListWithFollowStatusInput {
 }
 
 type CreateUserPayload {
-    userId: Int
-    username: String
+    user: User
 }
 
 type PostMessagePayload {
-    postId: Int
-    message: String
-    author: User
+    post: Post
+    user: User
 }
 
 type FollowUserPayload {
     following: User
     followed: User
-    followRelationshipId: Int
 }
 
 type UnfollowUserPayload {
     following: User
     followed: User
-    deletedFollowRelationshipId: Int
 }
 
 type GetTimelineFromUserPayload {
-    userId: Int
-    posts: [TimelineItem]
+    user: User
+    timeline: [TimelineItem]
 }
 
 type GetUserListWithFollowStatusPayload {
-    userId: Int
+    user: User
     otherUsersWithFollowStatus: [UserListItem]
 }

@@ -14,7 +14,7 @@ internal class GetUserListWithFollowStatusService
 constructor(private val getUserListWithFollowStatusPort: GetUserListWithFollowStatusPort,
             private val getUserByIdPort: GetUserByIdPort) : GetUserListWithFollowStatusUseCase {
     override fun getUserListWithFollowStatus(getUserListWithFollowStatusInput: GetUserListWithFollowStatusInput): GetUserListWithFollowStatusPayload {
-        return GetUserListWithFollowStatusPayload(getUserListWithFollowStatusInput.userId,
-                getUserListWithFollowStatusPort.getUserListWithFollowStatus(getUserByIdPort.getUserById(getUserListWithFollowStatusInput.userId)))
+        val user = getUserByIdPort.getUserById(getUserListWithFollowStatusInput.userId)
+        return GetUserListWithFollowStatusPayload(user, getUserListWithFollowStatusPort.getUserListWithFollowStatus(user))
     }
 }

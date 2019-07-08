@@ -13,7 +13,7 @@ internal class PostMessageService
 @Autowired
 constructor(private val postMessagePort: PostMessagePort, private val getUserByIdPort: GetUserByIdPort) : PostMessageUseCase {
     override fun postMessage(input: PostMessageInput): PostMessagePayload {
-        val author = getUserByIdPort.getUserById(input.userId)
-        return PostMessagePayload(postMessagePort.postMessage(author, input.message), input.message, author)
+        val user = getUserByIdPort.getUserById(input.userId)
+        return PostMessagePayload(postMessagePort.postMessage(user, input.message), user)
     }
 }

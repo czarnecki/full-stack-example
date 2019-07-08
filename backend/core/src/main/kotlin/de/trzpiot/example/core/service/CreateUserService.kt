@@ -12,6 +12,6 @@ internal class CreateUserService
 @Autowired
 constructor(private val createUserPort: CreateUserPort) : CreateUserUseCase {
     override fun createUser(createUserInput: CreateUserInput): CreateUserPayload {
-        return CreateUserPayload(createUserPort.createUser(createUserInput.username), createUserInput.username)
+        return CreateUserPayload(createUserPort.createUser(createUserInput.username))
     }
 }

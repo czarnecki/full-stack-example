@@ -14,7 +14,7 @@ internal class GetTimelineFromUserService
 constructor(private val getUserByIdPort: GetUserByIdPort,
             private val getTimelineFromUserPort: GetTimelineFromUserPort) : GetTimelineFromUserUseCase {
     override fun getTimelineFromUser(getTimelineFromUserInput: GetTimelineFromUserInput): GetTimelineFromUserPayload {
-        return GetTimelineFromUserPayload(getTimelineFromUserInput.userId,
-                getTimelineFromUserPort.getTimelineFromUser(getUserByIdPort.getUserById(getTimelineFromUserInput.userId)))
+        val user = getUserByIdPort.getUserById(getTimelineFromUserInput.userId)
+        return GetTimelineFromUserPayload(user, getTimelineFromUserPort.getTimelineFromUser(user))
     }
 }

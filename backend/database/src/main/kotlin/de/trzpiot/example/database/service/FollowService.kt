@@ -18,20 +18,15 @@ constructor(private val followRepository: FollowRepository) :
         FollowUserPort,
         IsFollowingPort,
         UnfollowUserPort {
-    override fun unfollowUser(following: UserFromCoreModule, followed: UserFromCoreModule): Long {
-        val followRelationship = followRepository.findRelationshipBetweenTwoUsers(following.id, followed.id)
-        followRepository.delete(followRelationship)
-        return followRelationship.id
-                ?: throw KotlinNullPointerException("Something went wrong deleting the follow relationship. The ID from the returned follow relationship is null.")
+    override fun unfollowUser(following: UserFromCoreModule, followed: UserFromCoreModule) {
+        followRepository.delete(followRepository.findRelationshipBetweenTwoUsers(following.id, followed.id))
     }
 
     override fun isFollowing(following: UserFromCoreModule, followed: UserFromCoreModule): Boolean {
         return followRepository.isFollowing(following.id, followed.id)
     }
 
-    override fun followUser(following: UserFromCoreModule, followed: UserFromCoreModule): Long {
-        val follow = FollowRelationship(dateOfFollowing = Date(), follower = UserNode(following.id, following.username), follows = UserNode(followed.id, followed.username))
-        return followRepository.save(follow).id
-                ?: throw KotlinNullPointerException("Something went wrong saving the follow relationship. The ID from the returned follow relationship is null.")
+    override fun followUser(following: UserFromCoreModule, followed: UserFromCoreModule) {
+        followRepository.save(FollowRelationship(dateOfFollowing = Date(), follower = UserNode(following.id, following.username), follows = UserNode(followed.id, followed.username)))
     }
 }

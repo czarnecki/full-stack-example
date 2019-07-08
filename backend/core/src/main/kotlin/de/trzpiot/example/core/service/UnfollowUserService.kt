@@ -24,6 +24,7 @@ constructor(
         if (!isFollowingPort.isFollowing(following, followed))
             throw NotFollowingException("Can't unfollow, because user with ID \"${following.id}\" isn't following user with ID \"${followed.id}\".")
 
-        return UnfollowUserPayload(following, followed, unfollowUserPort.unfollowUser(following, followed))
+        unfollowUserPort.unfollowUser(following, followed)
+        return UnfollowUserPayload(following, followed)
     }
 }

@@ -1,12 +1,13 @@
 package de.trzpiot.example.database.repository
 
 import de.trzpiot.example.database.domain.TimelineItemQueryResult
-import de.trzpiot.example.database.domain.UserNode
 import de.trzpiot.example.database.domain.UserListItemQueryResult
+import de.trzpiot.example.database.domain.UserNode
 import org.springframework.data.neo4j.annotation.Query
 import org.springframework.data.neo4j.repository.Neo4jRepository
 import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
+import java.util.*
 
 @Repository
 internal interface UserRepository : Neo4jRepository<UserNode, Long> {
@@ -27,4 +28,6 @@ internal interface UserRepository : Neo4jRepository<UserNode, Long> {
             "END AS isFollowing " +
             "ORDER BY user.username")
     fun getUserListWithFollowStatus(@Param("userId") userId: Long): List<UserListItemQueryResult>
+
+    fun findByUsername(username: String): Optional<UserNode>
 }

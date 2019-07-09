@@ -1,8 +1,9 @@
 scalar Date
 
 type Query {
-    getTimelineFromUserUseCase(input: GetTimelineFromUserInput!): GetTimelineFromUserPayload
+    getTimelineFromUser(input: GetTimelineFromUserInput!): GetTimelineFromUserPayload
     getUserListWithFollowStatus(input: GetUserListWithFollowStatusInput!): GetUserListWithFollowStatusPayload
+    getUserByUsername(input: GetUserByUsernameInput): GetUserByUsernamePayload
 }
 
 type Mutation {
@@ -26,6 +27,8 @@ type Post {
 type User {
     id: Int!
     username: String!
+    firstName: String!
+    lastName: String!
 }
 
 type TimelineItem {
@@ -35,6 +38,8 @@ type TimelineItem {
 
 input CreateUserInput {
     username: String!
+    firstName: String!
+    lastName: String!
 }
 
 input PostMessageInput {
@@ -58,6 +63,10 @@ input GetTimelineFromUserInput {
 
 input GetUserListWithFollowStatusInput {
     userId: Int!
+}
+
+input GetUserByUsernameInput {
+    username: String!
 }
 
 type CreateUserPayload {
@@ -87,4 +96,8 @@ type GetTimelineFromUserPayload {
 type GetUserListWithFollowStatusPayload {
     user: User
     otherUsersWithFollowStatus: [UserListItem]
+}
+
+type GetUserByUsernamePayload {
+    user: User
 }

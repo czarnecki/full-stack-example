@@ -22,11 +22,11 @@ constructor(private val followRepository: FollowRepository) :
         followRepository.delete(followRepository.findRelationshipBetweenTwoUsers(following.id, followed.id))
     }
 
-    override fun isFollowing(following: UserFromCoreModule, followed: UserFromCoreModule): Boolean {
-        return followRepository.isFollowing(following.id, followed.id)
+    override fun followUser(following: UserFromCoreModule, followed: UserFromCoreModule) {
+        followRepository.save(FollowRelationship(dateOfFollowing = Date(), follower = UserNode(following.id, following.username, following.firstName, following.lastName), follows = UserNode(followed.id, followed.username, followed.firstName, followed.lastName)))
     }
 
-    override fun followUser(following: UserFromCoreModule, followed: UserFromCoreModule) {
-        followRepository.save(FollowRelationship(dateOfFollowing = Date(), follower = UserNode(following.id, following.username), follows = UserNode(followed.id, followed.username)))
+    override fun isFollowing(following: UserFromCoreModule, followed: UserFromCoreModule): Boolean {
+        return followRepository.isFollowing(following.id, followed.id)
     }
 }

@@ -10,6 +10,7 @@ dependencies {
     implementation(project(":api"))
     implementation(project(":core"))
     implementation(project(":database"))
+    implementation(project(":security"))
 
     implementation("org.springframework.boot:spring-boot-starter")
 }

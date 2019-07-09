@@ -19,14 +19,20 @@ internal class UserService
 constructor(private val userRepository: UserRepository) :
         CreateUserPort,
         GetUserByIdPort,
+        GetUserByUsernamePort,
         GetTimelineFromUserPort,
         GetUserListWithFollowStatusPort,
-        PostMessagePort {
+        PostMessagePort,
+        IsUserWithUsernamePresentPort {
+    override fun isUserWithUsernamePresent(username: String): Boolean {
+        return userRepository.findByUsername(username).isPresent
+    }
+
     override fun postMessage(user: User, message: String): Post {
-        val user = UserNode(user.id, user.username)
+        val userNode = UserNode(user.id, user.username, user.firstName, user.lastName)
         var post = PostNode(message = message, creationDate = Date())
-        user.posts.add(post)
-        post = userRepository.save(user).posts[0]
+        userNode.posts.add(post)
+        post = userRepository.save(userNode).posts[0]
         return Post(post.id!!, post.message, post.creationDate)
     }
 
@@ -34,7 +40,7 @@ constructor(private val userRepository: UserRepository) :
         val userListItems = arrayListOf<UserListItem>()
 
         userRepository.getUserListWithFollowStatus(user.id).forEach {
-            userListItems.add(UserListItem(User(it.user.id!!, it.user.username), it.isFollowing))
+            userListItems.add(UserListItem(User(it.user.id!!, it.user.username, it.user.firstName, it.user.lastName), it.isFollowing))
         }
 
         return userListItems
@@ -44,7 +50,7 @@ constructor(private val userRepository: UserRepository) :
         val timelineItems = arrayListOf<TimelineItem>()
 
         userRepository.getTimelineFromUser(user.id).forEach {
-            timelineItems.add(TimelineItem(Post(it.post.id!!, it.post.message, it.post.creationDate), User(it.user.id!!, it.user.username)))
+            timelineItems.add(TimelineItem(Post(it.post.id!!, it.post.message, it.post.creationDate), User(it.user.id!!, it.user.username, it.user.firstName, it.user.lastName)))
         }
 
         return timelineItems.sortedByDescending { it.post.creationDate }
@@ -54,14 +60,24 @@ constructor(private val userRepository: UserRepository) :
         val user = userRepository.findById(id)
 
         if (user.isPresent) {
-            return User(user.get().id!!, user.get().username)
+            return User(user.get().id!!, user.get().username, user.get().firstName, user.get().lastName)
         } else {
-            throw UserNotFoundException("UserNode with ID \"$id\" not found")
+            throw UserNotFoundException("User with ID \"$id\" not found")
         }
     }
 
-    override fun createUser(username: String): User {
-        val user = userRepository.save(UserNode(username = username))
-        return User(user.id!!, user.username)
+    override fun getUserByUsername(username: String): User {
+        val user = userRepository.findByUsername(username)
+
+        if (user.isPresent) {
+            return User(user.get().id!!, user.get().username, user.get().firstName, user.get().lastName)
+        } else {
+            throw UserNotFoundException("User with username \"$username\" not found")
+        }
+    }
+
+    override fun createUser(username: String, firstName: String, lastName: String): User {
+        val user = userRepository.save(UserNode(username = username, firstName = firstName, lastName = lastName))
+        return User(user.id!!, user.username, user.firstName, user.lastName)
     }
 }

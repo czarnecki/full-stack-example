@@ -1,6 +1,6 @@
 const String getTimeline = r'''
 query GetTimeLine($userId: Int!) {
-  getTimelineFromUser(input: {userId: $userId}) {
+  action: getTimelineFromUser(input: {userId: $userId}) {
     timeline {
       post {
         id

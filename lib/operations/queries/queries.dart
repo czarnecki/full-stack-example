@@ -1,2 +1,2 @@
-export './getUsers.dart';
 export './getTimeline.dart';
+export './getUsers.dart';

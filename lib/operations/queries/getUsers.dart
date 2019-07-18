@@ -1,7 +1,7 @@
 const String getUsers = r'''
 query GetUsers($userId: Int!) {
-  getUserListWithFollowStatus(input: {userId: $userId}) {
-    otherUsersWithFollowStatus {
+  action: getUserListWithFollowStatus(input: {userId: $userId}) {
+    users: otherUsersWithFollowStatus {
       user {
         id
         username

@@ -4,6 +4,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'common/config.dart' as config;
 import 'common/token.dart';
 import 'widgets/timeline.dart';
+import 'widgets/users.dart';
 
 main() async {
   final AuthLink authLink =
@@ -42,10 +43,8 @@ class MyAppStateWidget extends StatefulWidget {
 class _MyAppState extends State<MyAppStateWidget> {
   PageController _pageController = PageController(initialPage: 0);
   List<Widget> _views = [
-    TimelineWidget(),
-    Center(
-      child: Text('test'),
-    )
+    Timeline(),
+    UserList(),
   ];
 
   @override
@@ -60,7 +59,6 @@ class _MyAppState extends State<MyAppStateWidget> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
-        notchMargin: 4.0,
         shape: CircularNotchedRectangle(),
         child: Row(
           mainAxisSize: MainAxisSize.max,
@@ -71,6 +69,7 @@ class _MyAppState extends State<MyAppStateWidget> {
               onPressed: () => _pageController.jumpToPage(0),
             ),
             IconButton(
+              tooltip: 'Timeline',
               icon: Icon(Icons.timeline),
               onPressed: () => _pageController.jumpToPage(1),
             ),

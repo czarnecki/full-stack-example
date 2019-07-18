@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/operations/queries/queries.dart' as query;
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-class TimelineWidget extends StatelessWidget {
+class Timeline extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _TimelineQuery();
@@ -10,37 +11,15 @@ class TimelineWidget extends StatelessWidget {
 
 class _TimelineQuery extends StatelessWidget {
   static final _userId = 20;
-  final String _timelineQuery = """
-  query {
-    getTimelineFromUser(input: {userId: $_userId}) {
-      timeline {
-        post {
-          id
-          message
-          creationDate
-        }
-        user {
-          id
-          username
-          firstName
-          lastName
-        }
-      }
-      user {
-       id
-       username
-       firstName
-       lastName
-      }
-    }
-  }
-  """;
 
   @override
   Widget build(BuildContext context) {
     return Query(
       options: QueryOptions(
-        document: _timelineQuery,
+        document: query.getTimeline,
+        variables: {
+          'userId': _userId,
+        },
         pollInterval: 10,
       ),
       builder: (QueryResult result, {BoolCallback refetch}) {

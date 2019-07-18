@@ -1,27 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/operations/mutations/mutations.dart' as mutation;
-import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:frontend/operations/queries/queries.dart' as query;
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 class UserList extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return _UserListQuery();
-  }
-}
-
-class _UserListQuery extends StatelessWidget {
   static final _userId = 20;
+
   @override
   Widget build(BuildContext context) {
     return Query(
-      options: QueryOptions(
-        fetchPolicy: FetchPolicy.networkOnly,
-        document: query.getUsers,
-        variables: {
-          'userId' : _userId
-        }
-      ),
+      options: QueryOptions(document: query.getUsers,
+          variables: {'userId': _userId}),
       builder: (QueryResult result, {BoolCallback refetch}) {
         if (result.hasErrors) {
           return Text(result.errors.toString());
@@ -31,68 +20,47 @@ class _UserListQuery extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         }
-        List users = result.data['getUserListWithFollowStatus']
-            ['otherUsersWithFollowStatus'];
-        return ListView.separated(
-          itemBuilder: (context, index) {
-            final userItem = users[index];
-            return ListTile(
-              title: Text(userItem['user']['username']),
-              trailing: _FollowMutation(
-                20,
-                userItem['user']['id'],
-                userItem['isFollowing'],
-              ),
-            );
-          },
-          separatorBuilder: (context, index) => Divider(),
+        List users = result.data['action']['users'];
+        return ListView.builder(
           itemCount: users.length,
+          itemBuilder: (context, index) {
+            return _Follow(_userId, users[index]);
+          },
         );
       },
     );
   }
 }
 
-class _FollowMutation extends StatefulWidget {
+class _Follow extends StatelessWidget {
   final int _userId;
-  final int _otherUserId;
-  final bool _following;
+  final Map<String, dynamic> _userItem;
 
-  _FollowMutation(this._userId, this._otherUserId, this._following);
+  _Follow(this._userId, this._userItem);
 
-  @override
-  State<StatefulWidget> createState() {
-    return _FollowState(_userId, _otherUserId, _following);
-  }
-}
+  bool get _following => _userItem['isFollowing'];
 
-class _FollowState extends State<_FollowMutation> {
-  int _userId;
-  int _otherUserId;
-  bool _following;
+  int get _otherUserId => _userItem['user']['id'];
 
-  _FollowState(this._userId, this._otherUserId, this._following);
+  String get _username => _userItem['user']['username'];
 
   @override
   Widget build(BuildContext context) {
     return Mutation(
       options: MutationOptions(
           document: _following ? mutation.unfollowUser : mutation.followUser),
-      builder: (RunMutation runMutation, QueryResult queryResult) {
-        return IconButton(
-          icon: Icon(Icons.favorite, color: _following ? Colors.red : null),
-          onPressed: () => runMutation({
+      builder: (RunMutation toggleFollow, QueryResult queryResult) {
+        return ListTile(
+          title: Text(_username),
+          trailing: Icon(Icons.favorite, color: _following ? Colors.red : null),
+          onTap: () => toggleFollow({
             'userId': _userId,
             'otherUserId': _otherUserId,
           }),
         );
       },
       update: (Cache cache, QueryResult result) {
-        if (!result.hasErrors) {
-          setState(() {
-            _following = _following ? false : true;
-          });
-        }
+        cache.reset();
       },
     );
   }

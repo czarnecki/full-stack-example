@@ -31,7 +31,7 @@ class _TimelineQuery extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         }
-        List timeline = result.data['getTimelineFromUser']['timeline'];
+        List timeline = result.data['action']['timeline'];
         return ListView.separated(
           separatorBuilder: (context, index) => Divider(),
           itemCount: timeline.length,

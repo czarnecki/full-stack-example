@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/widgets/post.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 import 'common/config.dart' as config;
@@ -14,7 +15,9 @@ main() async {
   final ValueNotifier<GraphQLClient> client = ValueNotifier(
     GraphQLClient(
       link: link,
-      cache: InMemoryCache(),
+      cache: NormalizedInMemoryCache(
+        dataIdFromObject: typenameDataIdFromObject,
+      ),
     ),
   );
   runApp(
@@ -53,10 +56,7 @@ class _MyAppState extends State<MyAppStateWidget> {
       appBar: AppBar(
         title: Text('Test'),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: null,
-        child: Icon(Icons.add),
-      ),
+      floatingActionButton: Post(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),
@@ -65,12 +65,13 @@ class _MyAppState extends State<MyAppStateWidget> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             IconButton(
+              tooltip: 'Timeline',
               icon: Icon(Icons.timeline),
               onPressed: () => _pageController.jumpToPage(0),
             ),
             IconButton(
-              tooltip: 'Timeline',
-              icon: Icon(Icons.timeline),
+              tooltip: 'Users',
+              icon: Icon(Icons.list),
               onPressed: () => _pageController.jumpToPage(1),
             ),
           ],

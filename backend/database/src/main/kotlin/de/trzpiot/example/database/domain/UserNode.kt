@@ -8,8 +8,8 @@ import org.neo4j.ogm.annotation.Relationship.OUTGOING
 internal data class UserNode(
         var id: Long? = null,
         var username: String,
-        var firstName: String,
-        var lastName: String,
+        var givenName: String,
+        var familyName: String,
 
         @Relationship(direction = OUTGOING)
         var follows: MutableList<FollowRelationship> = mutableListOf(),

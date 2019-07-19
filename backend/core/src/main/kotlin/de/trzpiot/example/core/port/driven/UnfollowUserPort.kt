@@ -1,7 +1,7 @@
 package de.trzpiot.example.core.port.driven
 
-import de.trzpiot.example.core.domain.User
+import de.trzpiot.example.core.domain.AuthenticatedUser
 
 interface UnfollowUserPort {
-    fun unfollowUser(following: User, followed: User)
+    fun unfollowUser(following: AuthenticatedUser, followed: AuthenticatedUser)
 }

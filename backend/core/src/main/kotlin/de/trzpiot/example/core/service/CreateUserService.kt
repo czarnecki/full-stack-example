@@ -1,6 +1,7 @@
 package de.trzpiot.example.core.service
 
 import de.trzpiot.example.core.UsernameAlreadyUsed
+import de.trzpiot.example.core.domain.User
 import de.trzpiot.example.core.port.driven.CreateUserPort
 import de.trzpiot.example.core.port.driven.IsUserWithUsernamePresentPort
 import de.trzpiot.example.core.port.driver.input.CreateUserInput
@@ -17,6 +18,8 @@ constructor(private val createUserPort: CreateUserPort,
     override fun createUser(createUserInput: CreateUserInput): CreateUserPayload {
         if (isUserWithUsernamePresentPort.isUserWithUsernamePresent(createUserInput.username))
             throw UsernameAlreadyUsed("The username \"${createUserInput.username}\" is already used.")
-        return CreateUserPayload(createUserPort.createUser(createUserInput.username, createUserInput.firstName, createUserInput.lastName))
+
+        val user = createUserPort.createUser(createUserInput.username, createUserInput.givenName, createUserInput.familyName)
+        return CreateUserPayload(User(user.username, user.givenName, user.familyName))
     }
 }

@@ -15,9 +15,7 @@ main() async {
   final ValueNotifier<GraphQLClient> client = ValueNotifier(
     GraphQLClient(
       link: link,
-      cache: NormalizedInMemoryCache(
-        dataIdFromObject: typenameDataIdFromObject,
-      ),
+      cache: InMemoryCache(),
     ),
   );
   runApp(

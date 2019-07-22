@@ -1,3 +1,3 @@
-export './followUser.dart';
-export './sendPost.dart';
-export './unfollowUser.dart';
+export './follow_user.dart';
+export './send_post.dart';
+export './unfollow_user.dart';

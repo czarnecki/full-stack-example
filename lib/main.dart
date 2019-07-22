@@ -42,11 +42,18 @@ class MyAppStateWidget extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyAppStateWidget> {
-  PageController _pageController = PageController(initialPage: 0);
-  List<Widget> _views = [
+  int _index = 0;
+
+  final List<Widget> _views = [
     Timeline(),
     UserList(),
   ];
+
+  _onTappedIcon(int index) {
+    setState(() {
+      this._index = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,27 +65,23 @@ class _MyAppState extends State<MyAppStateWidget> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            IconButton(
-              tooltip: 'Timeline',
+        clipBehavior: Clip.antiAlias,
+        child: BottomNavigationBar(
+          currentIndex: _index,
+          onTap: _onTappedIcon,
+          items: [
+            BottomNavigationBarItem(
               icon: Icon(Icons.timeline),
-              onPressed: () => _pageController.jumpToPage(0),
+              title: Text('Timeline'),
             ),
-            IconButton(
-              tooltip: 'Users',
+            BottomNavigationBarItem(
               icon: Icon(Icons.list),
-              onPressed: () => _pageController.jumpToPage(1),
+              title: Text('Users'),
             ),
           ],
         ),
       ),
-      body: PageView(
-        controller: _pageController,
-        children: _views,
-      ),
+      body: _views[_index],
     );
   }
 }

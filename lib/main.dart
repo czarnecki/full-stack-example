@@ -21,28 +21,30 @@ main() async {
   runApp(
     GraphQLProvider(
       client: client,
-      child: MyApp(),
+      child: App(),
     ),
   );
 }
 
-class MyApp extends StatelessWidget {
+class App extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'FSE Frontend App',
-      home: MyAppStateWidget(),
-    );
+  Widget build(BuildContext context) => MaterialApp(
+        title: 'FSE Frontend App',
+        home: AppHome(),
+      );
+}
+
+class AppHome extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return _AppHomeState();
   }
 }
 
-class MyAppStateWidget extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyAppStateWidget> {
+class _AppHomeState extends State<AppHome> {
   int _index = 0;
+
+  final String _title = 'Full Stack Example';
 
   final List<Widget> _views = [
     Timeline(),
@@ -59,7 +61,7 @@ class _MyAppState extends State<MyAppStateWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Test'),
+        title: Text(_title),
       ),
       floatingActionButton: Post(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

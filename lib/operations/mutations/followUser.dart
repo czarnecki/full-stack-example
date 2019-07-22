@@ -1,8 +1,8 @@
-const String followUser = r'''
-mutation FollowUser($userId: Int!, $otherUserId: Int!) {
-  action: followUser(input: {followingUserId: $userId, followedUserId: $otherUserId}) {
+const String follow = r'''
+mutation FollowUser($followedUserUsername: String!) {
+  action: followUser(input: {followedUserUsername: $followedUserUsername}) {
     following {
-      id
+      username
     }
   }
 }

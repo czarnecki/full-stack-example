@@ -1,6 +1,6 @@
 const String getTimeline = r'''
-query GetTimeLine($userId: Int!) {
-  action: getTimelineFromUser(input: {userId: $userId}) {
+query GetTimeLine {
+  action: getTimelineFromUser {
     timeline {
       post {
         id
@@ -8,17 +8,15 @@ query GetTimeLine($userId: Int!) {
         creationDate
       }
       user {
-        id
         username
-        firstName
-        lastName
+        givenName
+        familyName
       }
     }
     user {
-      id
       username
-      firstName
-      lastName
+      givenName
+      familyName
     }
   }
 }

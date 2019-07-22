@@ -10,17 +10,11 @@ class Timeline extends StatelessWidget {
 }
 
 class _TimelineQuery extends StatelessWidget {
-  static final _userId = 20;
-
   @override
   Widget build(BuildContext context) {
     return Query(
       options: QueryOptions(
         document: query.getTimeline,
-        variables: {
-          'userId': _userId,
-        },
-        pollInterval: 10,
       ),
       builder: (QueryResult result, {BoolCallback refetch}) {
         if (result.hasErrors) {

@@ -53,7 +53,6 @@ class _SendPost extends StatelessWidget {
           onPressed: () {
             if (_controller.text.length > 0) {
               sendPost({
-                'userId': 20,
                 'message': _controller.text,
               });
             }

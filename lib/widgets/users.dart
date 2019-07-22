@@ -50,7 +50,12 @@ class _Follow extends StatelessWidget {
       builder: (RunMutation toggleFollow, QueryResult queryResult) {
         return ListTile(
           title: Text(_username),
-          trailing: Icon(Icons.favorite, color: _following ? Colors.red : null),
+          trailing: _following
+              ? const Icon(
+                  Icons.favorite,
+                  color: Colors.red,
+                )
+              : Icon(Icons.favorite_border),
           onTap: () => toggleFollow({
             'followedUserUsername': _username,
           }),

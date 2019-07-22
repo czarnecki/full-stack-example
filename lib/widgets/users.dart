@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/operations/mutations/mutations.dart' as mutation;
-import 'package:frontend/operations/queries/queries.dart' as query;
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-class UserList extends StatelessWidget {
+import '../operations/mutations/mutations.dart' as mutation;
+import '../operations/queries/queries.dart' as query;
 
+class UserList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Query(
@@ -24,7 +24,7 @@ class UserList extends StatelessWidget {
         return ListView.builder(
           itemCount: users.length,
           itemBuilder: (context, index) {
-            return _Follow(users[index]);
+            return _Follow(users[index], refetch);
           },
         );
       },
@@ -34,8 +34,9 @@ class UserList extends StatelessWidget {
 
 class _Follow extends StatelessWidget {
   final Map<String, dynamic> _userItem;
+  final BoolCallback refetch;
 
-  _Follow(this._userItem);
+  _Follow(this._userItem, this.refetch);
 
   bool get _following => _userItem['isFollowing'];
 
@@ -56,7 +57,7 @@ class _Follow extends StatelessWidget {
         );
       },
       update: (Cache cache, QueryResult result) {
-        cache.reset();
+        refetch();
       },
     );
   }

@@ -63,6 +63,7 @@ class _AppHomeState extends State<AppHome> {
       appBar: AppBar(
         title: Text(_title),
       ),
+      resizeToAvoidBottomPadding: false,
       floatingActionButton: Post(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(

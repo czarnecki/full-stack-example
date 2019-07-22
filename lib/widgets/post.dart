@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:frontend/operations/mutations/mutations.dart' as mutation;
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -7,12 +9,33 @@ class Post extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
       tooltip: 'Write post',
-      onPressed: () => Navigator.push(
-        context,
-        MaterialPageRoute<void>(
-          builder: (context) => _TextWidget(),
-        ),
-      ),
+      onPressed: () async {
+        var error = await Navigator.of(context).push(
+          PageRouteBuilder(
+            opaque: false,
+            pageBuilder: (BuildContext context, _, __) {
+              return BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                child: _TextWidget(),
+              );
+            },
+          ),
+        );
+        if (error != null) {
+          Scaffold.of(context).showSnackBar(
+            SnackBar(
+              content: error
+                  ? Text('There was an error sending your post')
+                  : Text('Message send sucesfully'),
+              behavior: SnackBarBehavior.floating,
+              action: SnackBarAction(
+                  label: 'Close',
+                  onPressed: () =>
+                      Scaffold.of(context).removeCurrentSnackBar()),
+            ),
+          );
+        }
+      },
       child: Icon(Icons.add),
     );
   }
@@ -24,46 +47,54 @@ class _TextWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Write new post'),
-        ),
-        body: TextField(
+      backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        title: Text('Write new post'),
+      ),
+      body: Container(
+        padding: EdgeInsets.all(5.0),
+        alignment: FractionalOffset.bottomCenter,
+        child: TextField(
           autofocus: true,
-          keyboardType: TextInputType.multiline,
+          maxLength: 140,
+          onSubmitted: (message) => print(message),
           maxLines: null,
+          keyboardType: TextInputType.multiline,
           controller: _textController,
           decoration: InputDecoration(
+            hintText: 'Message',
             border: OutlineInputBorder(),
+            fillColor: Colors.white,
+            suffixIcon: _SendPost(_textController),
+            filled: true,
           ),
         ),
-        floatingActionButton: _SendPost(_textController));
+      ),
+    );
   }
 }
 
 class _SendPost extends StatelessWidget {
-  final TextEditingController _controller;
+  final TextEditingController _textController;
 
-  _SendPost(this._controller);
+  _SendPost(this._textController);
+
+  _sendPost(RunMutation sendPost) {
+    sendPost({'message': _textController.text});
+  }
 
   @override
   Widget build(BuildContext context) {
     return Mutation(
       builder: (RunMutation sendPost, QueryResult result) {
-        return FloatingActionButton(
-          onPressed: () {
-            if (_controller.text.length > 0) {
-              sendPost({
-                'message': _controller.text,
-              });
-            }
-          },
-          child:
-              result.loading ? CircularProgressIndicator() : Icon(Icons.send),
+        return IconButton(
+          onPressed: () => _sendPost(sendPost),
+          icon: result.loading ? CircularProgressIndicator() : Icon(Icons.send),
         );
       },
-      onCompleted: (dynamic resultData) {
-        _controller.clear();
-        Navigator.pop(context);
+      update: (Cache cache, QueryResult result) {
+        _textController.clear();
+        Navigator.pop(context, result.hasErrors);
       },
       options: MutationOptions(
         document: mutation.sendPost,

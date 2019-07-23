@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/operations/queries/queries.dart' as query;
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:intl/intl.dart';
+
+import '../domain/domain.dart' as domain;
+import '../operations/queries/queries.dart' as query;
 
 class Timeline extends StatelessWidget {
   @override
@@ -45,27 +47,21 @@ class _TimelineList extends StatelessWidget {
         child: CircularProgressIndicator(),
       );
     }
-    List timeline = result.data['action']['timeline'];
+    var timeline = domain.Timeline.fromQuery(result);
     return ListView.builder(
       physics: BouncingScrollPhysics(),
-      itemCount: timeline.length,
+      itemCount: timeline.timelineItems.length,
       itemBuilder: (context, index) {
-        return _TimelineCard(timeline[index]);
+        return _TimelineCard(timeline.timelineItems[index]);
       },
     );
   }
 }
 
 class _TimelineCard extends StatelessWidget {
-  final Map<String, dynamic> _timelineItem;
+  final domain.TimelineItem _timelineItem;
 
   _TimelineCard(this._timelineItem);
-
-  String get _username => _timelineItem['user']['username'];
-
-  String get _message => _timelineItem['post']['message'];
-
-  String get _creationDate => _timelineItem['post']['creationDate'];
 
   @override
   Widget build(BuildContext context) {
@@ -84,6 +80,23 @@ class _TimelineCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Row(
+                children: <Widget>[
+                  Text(_timelineItem.user.fullName),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text(
+                      '\$${_timelineItem.user.username}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Padding(
               padding: const EdgeInsets.only(
                 top: 5.0,
                 left: 5.0,
@@ -91,29 +104,21 @@ class _TimelineCard extends StatelessWidget {
                 bottom: 10.0,
               ),
               child: Text(
-                _message,
+                _timelineItem.post.message,
                 style: TextStyle(
                   fontSize: 15.5,
                 ),
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  '@$_username',
-                  style: TextStyle(
-                    fontStyle: FontStyle.italic,
-                  ),
+            Container(
+              alignment: FractionalOffset.centerRight,
+              child: Text(
+                DateFormat.yMMMEd()
+                    .format(_timelineItem.post.creationDate.toLocal()),
+                style: TextStyle(
+                  fontStyle: FontStyle.italic,
                 ),
-                Text(
-                  DateFormat.yMMMEd()
-                      .format(DateTime.parse(_creationDate).toLocal()),
-                  style: TextStyle(
-                    fontStyle: FontStyle.italic,
-                  ),
-                ),
-              ],
+              ),
             ),
           ],
         ),

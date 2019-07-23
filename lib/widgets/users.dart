@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
+import '../domain/domain.dart' as domain;
 import '../operations/mutations/mutations.dart' as mutation;
 import '../operations/queries/queries.dart' as query;
 
@@ -20,11 +21,16 @@ class UserList extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         }
-        List users = result.data['action']['users'];
-        return ListView.builder(
-          itemCount: users.length,
+        var userList = domain.UserList.fromQuery(result);
+        return ListView.separated(
+          itemCount: userList.users.length,
           itemBuilder: (context, index) {
-            return _Follow(users[index], refetch);
+            return _Follow(userList.users[index], refetch);
+          },
+          separatorBuilder: (BuildContext context, int index) {
+            return Divider(
+              color: Colors.black,
+            );
           },
         );
       },
@@ -33,31 +39,41 @@ class UserList extends StatelessWidget {
 }
 
 class _Follow extends StatelessWidget {
-  final Map<String, dynamic> _userItem;
+  final domain.UserListItem _userItem;
   final BoolCallback refetch;
 
   _Follow(this._userItem, this.refetch);
-
-  bool get _following => _userItem['isFollowing'];
-
-  String get _username => _userItem['user']['username'];
 
   @override
   Widget build(BuildContext context) {
     return Mutation(
       options: MutationOptions(
-          document: _following ? mutation.unfollow : mutation.follow),
+        document: _userItem.isFollowing ? mutation.unfollow : mutation.follow,
+      ),
       builder: (RunMutation toggleFollow, QueryResult queryResult) {
         return ListTile(
-          title: Text(_username),
-          trailing: _following
+          title: Row(
+            children: <Widget>[
+              Text('${_userItem.user.givenName} ${_userItem.user.familyName}'),
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Text(
+                  '\$${_userItem.user.username}',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              )
+            ],
+          ),
+          trailing: _userItem.isFollowing
               ? const Icon(
-                  Icons.favorite,
-                  color: Colors.red,
+                  Icons.star,
+                  color: Colors.amber,
                 )
-              : Icon(Icons.favorite_border),
+              : const Icon(Icons.star_border),
           onTap: () => toggleFollow({
-            'followedUserUsername': _username,
+            'followedUserUsername': _userItem.user.username,
           }),
         );
       },

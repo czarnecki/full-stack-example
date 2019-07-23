@@ -1,16 +1,10 @@
-import 'package:graphql_flutter/graphql_flutter.dart';
-
 import 'user.dart';
 
 class UserList {
-  final List<UserListItem> users;
-
-  UserList(this.users);
-
-  static UserList fromQuery(QueryResult result) {
-    List userListData = result.data['action']['users'];
+  static List<UserListItem> fromQuery(dynamic data) {
+    List userListData = data['action']['users'];
     var users = userListData.map(UserListItem.fromQuery).toList();
-    return UserList(users);
+    return users;
   }
 }
 

@@ -21,11 +21,11 @@ class UserList extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         }
-        var userList = domain.UserList.fromQuery(result);
+        var users = domain.UserList.fromQuery(result.data);
         return ListView.separated(
-          itemCount: userList.users.length,
+          itemCount: users.length,
           itemBuilder: (context, index) {
-            return _Follow(userList.users[index], refetch);
+            return _Follow(users[index], refetch);
           },
           separatorBuilder: (BuildContext context, int index) {
             return Divider(

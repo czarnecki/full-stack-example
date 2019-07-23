@@ -47,12 +47,12 @@ class _TimelineList extends StatelessWidget {
         child: CircularProgressIndicator(),
       );
     }
-    var timeline = domain.Timeline.fromQuery(result);
+    var timeline = domain.Timeline.fromQuery(result.data);
     return ListView.builder(
       physics: BouncingScrollPhysics(),
-      itemCount: timeline.timelineItems.length,
+      itemCount: timeline.length,
       itemBuilder: (context, index) {
-        return _TimelineCard(timeline.timelineItems[index]);
+        return _TimelineCard(timeline[index]);
       },
     );
   }

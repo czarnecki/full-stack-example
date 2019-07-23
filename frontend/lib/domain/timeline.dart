@@ -1,17 +1,11 @@
-import 'package:graphql_flutter/graphql_flutter.dart';
-
 import 'post.dart';
 import 'user.dart';
 
 class Timeline {
-  final List<TimelineItem> timelineItems;
-
-  Timeline._(this.timelineItems);
-
-  static Timeline fromQuery(QueryResult result) {
-    List queryTimelineItem = result.data['action']['timeline'];
+  static List<TimelineItem> fromQuery(dynamic data) {
+    List queryTimelineItem = data['action']['timeline'];
     var timelineItems = queryTimelineItem.map(TimelineItem.fromQuery).toList();
-    return Timeline._(timelineItems);
+    return timelineItems;
   }
 }
 

@@ -30,9 +30,9 @@ class Post extends StatelessWidget {
                   : Text('Post send sucesfully'),
               behavior: SnackBarBehavior.floating,
               action: SnackBarAction(
-                  label: 'Close',
-                  onPressed: () =>
-                      Scaffold.of(context).removeCurrentSnackBar()),
+                label: 'Close',
+                onPressed: () => Scaffold.of(context).removeCurrentSnackBar(),
+              ),
             ),
           );
         }
@@ -53,21 +53,29 @@ class _TextWidget extends StatelessWidget {
         title: Text('Write new post'),
       ),
       body: Container(
-        padding: EdgeInsets.all(5.0),
         alignment: FractionalOffset.bottomCenter,
-        child: TextField(
-          autofocus: true,
-          maxLength: 140,
-          maxLines: null,
-          keyboardType: TextInputType.multiline,
-          controller: _textController,
-          decoration: InputDecoration(
-            hintText: 'Message',
-            border: OutlineInputBorder(),
-            fillColor: Colors.white,
-            suffixIcon: _SendPost(_textController),
-            filled: true,
-          ),
+        margin: EdgeInsets.all(8.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Flexible(
+              child: TextField(
+                autofocus: true,
+                maxLines: null,
+                keyboardType: TextInputType.multiline,
+                controller: _textController,
+                decoration: InputDecoration(
+                  hintText: 'Message',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(32.0),
+                  ),
+                  fillColor: Colors.white,
+                  filled: true,
+                ),
+              ),
+            ),
+            _SendPost(_textController),
+          ],
         ),
       ),
     );
@@ -79,7 +87,7 @@ class _SendPost extends StatelessWidget {
 
   _SendPost(this._textController);
 
-  _sendPost(RunMutation sendPost) {
+  _sendPost(RunMutation sendPost, BuildContext context) {
     if (_textController.text.length > 0) {
       sendPost({
         'message': _textController.text,
@@ -91,9 +99,18 @@ class _SendPost extends StatelessWidget {
   Widget build(BuildContext context) {
     return Mutation(
       builder: (RunMutation sendPost, QueryResult result) {
-        return IconButton(
-          onPressed: () => _sendPost(sendPost),
-          icon: result.loading ? CircularProgressIndicator() : Icon(Icons.send),
+        return RawMaterialButton(
+          onPressed: () => _sendPost(sendPost, context),
+          child: Icon(
+            Icons.send,
+            color: Colors.white,
+          ),
+          materialTapTargetSize: MaterialTapTargetSize.padded,
+          shape: CircleBorder(),
+          fillColor: Colors.blue,
+          constraints: BoxConstraints(),
+          elevation: 0,
+          padding: EdgeInsets.all(15),
         );
       },
       update: (Cache cache, QueryResult result) {

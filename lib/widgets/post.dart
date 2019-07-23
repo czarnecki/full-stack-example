@@ -1,8 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:frontend/operations/mutations/mutations.dart' as mutation;
 import 'package:graphql_flutter/graphql_flutter.dart';
+
+import '../operations/mutations/mutations.dart' as mutation;
 
 class Post extends StatelessWidget {
   @override
@@ -26,7 +27,7 @@ class Post extends StatelessWidget {
             SnackBar(
               content: error
                   ? Text('There was an error sending your post')
-                  : Text('Message send sucesfully'),
+                  : Text('Post send sucesfully'),
               behavior: SnackBarBehavior.floating,
               action: SnackBarAction(
                   label: 'Close',
@@ -57,7 +58,6 @@ class _TextWidget extends StatelessWidget {
         child: TextField(
           autofocus: true,
           maxLength: 140,
-          onSubmitted: (message) => print(message),
           maxLines: null,
           keyboardType: TextInputType.multiline,
           controller: _textController,
@@ -80,7 +80,11 @@ class _SendPost extends StatelessWidget {
   _SendPost(this._textController);
 
   _sendPost(RunMutation sendPost) {
-    sendPost({'message': _textController.text});
+    if (_textController.text.length > 0) {
+      sendPost({
+        'message': _textController.text,
+      });
+    }
   }
 
   @override

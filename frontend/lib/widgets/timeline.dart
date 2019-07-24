@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../domain/domain.dart' as domain;
 import '../operations/queries/queries.dart' as query;
 
+/// Widget which shows posts written by followed users and the user themselves.
 class Timeline extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -12,6 +13,7 @@ class Timeline extends StatelessWidget {
   }
 }
 
+/// Widget which sets up the Query ability to refresh the list
 class _TimelineQuery extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -32,6 +34,7 @@ class _TimelineQuery extends StatelessWidget {
   }
 }
 
+/// The widget that builds the timeline
 class _TimelineList extends StatelessWidget {
   final QueryResult result;
 
@@ -52,16 +55,17 @@ class _TimelineList extends StatelessWidget {
       physics: BouncingScrollPhysics(),
       itemCount: timeline.length,
       itemBuilder: (context, index) {
-        return _TimelineCard(timeline[index]);
+        return _TimelinePost(timeline[index]);
       },
     );
   }
 }
 
-class _TimelineCard extends StatelessWidget {
+/// Widget that presents a single post
+class _TimelinePost extends StatelessWidget {
   final domain.TimelineItem _timelineItem;
 
-  _TimelineCard(this._timelineItem);
+  _TimelinePost(this._timelineItem);
 
   @override
   Widget build(BuildContext context) {

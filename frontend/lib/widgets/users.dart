@@ -6,6 +6,7 @@ import '../domain/domain.dart' as domain;
 import '../operations/mutations/mutations.dart' as mutation;
 import '../operations/queries/queries.dart' as query;
 
+/// List of all users and the follow status
 class UserList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class UserList extends StatelessWidget {
         return ListView.separated(
           itemCount: users.length,
           itemBuilder: (context, index) {
-            return _Follow(users[index], refetch);
+            return _FollowStatus(users[index], refetch);
           },
           separatorBuilder: (BuildContext context, int index) {
             return Divider(
@@ -41,11 +42,12 @@ class UserList extends StatelessWidget {
   }
 }
 
-class _Follow extends StatelessWidget {
+/// Widget that builds the list entries and manages following/unfollowing
+class _FollowStatus extends StatelessWidget {
   final domain.UserListItem _userItem;
   final BoolCallback refetch;
 
-  _Follow(this._userItem, this.refetch);
+  _FollowStatus(this._userItem, this.refetch);
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +78,7 @@ class _Follow extends StatelessWidget {
           }),
         );
       },
-      update: (Cache cache, QueryResult result) {
+      onCompleted: (dynamic data) {
         refetch();
       },
     );

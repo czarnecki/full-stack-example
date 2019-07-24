@@ -3,13 +3,16 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 
 import 'common/auth.dart' as auth;
 import 'common/config.dart' as config;
+import 'widgets/auth_form.dart';
 import 'widgets/home.dart';
-import 'widgets/login.dart';
 
 main() async {
-  var loggedIn = await auth.login();
-  var defaultHome = loggedIn ? Home() : Login();
+  var authenticated = await auth.authenticate();
 
+  // Set default home based on result of authentication
+  var defaultHome = authenticated ? Home() : AuthForm();
+
+  // Initial setup for GraphQL client to work with in all views
   final AuthLink authLink = AuthLink(
     getToken: () async => 'Bearer ${await auth.fetchToken()}',
   );
@@ -48,7 +51,7 @@ class App extends StatelessWidget {
       darkTheme: ThemeData.dark(),
       routes: {
         '/home': (BuildContext context) => Home(),
-        '/login': (BuildContext context) => Login(),
+        '/login': (BuildContext context) => AuthForm(),
       },
     );
   }

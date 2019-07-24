@@ -18,6 +18,10 @@ Future<Map<String, String>> _readCredentials() async {
   return {'username': username, 'password': password};
 }
 
+/// Fetches token from Keycloak Server
+///
+/// Returns a JWT authentication token when a valid username and password are
+/// found in the secure storage otherwise it returns null.
 Future<String> fetchToken() async {
   var credentials = await _readCredentials();
   var response = await http.post(
@@ -32,7 +36,12 @@ Future<String> fetchToken() async {
   return convert.jsonDecode(response.body)['access_token'];
 }
 
-Future<bool> login([String username, String password]) async {
+/// Tries to authenticate the user
+///
+/// Returns true if the user could be authenticated successfully and false
+/// otherwise.
+/// [username] and [password] have to be either both null or both given.
+Future<bool> authenticate([String username, String password]) async {
   assert(
     (username == null && password == null) ||
         (username != null && password != null),

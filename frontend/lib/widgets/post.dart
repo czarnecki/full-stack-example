@@ -5,9 +5,11 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 
 import '../operations/mutations/mutations.dart' as mutation;
 
+/// Widget responsible for writing and sending posts
 class Post extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // Button which opens the post screen
     return FloatingActionButton(
       tooltip: 'Write post',
       onPressed: () async {
@@ -17,7 +19,7 @@ class Post extends StatelessWidget {
             pageBuilder: (BuildContext context, _, __) {
               return BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                child: _TextWidget(),
+                child: _PostField(),
               );
             },
           ),
@@ -42,7 +44,8 @@ class Post extends StatelessWidget {
   }
 }
 
-class _TextWidget extends StatelessWidget {
+/// The field where the user writes his post
+class _PostField extends StatelessWidget {
   final TextEditingController _textController = TextEditingController();
 
   @override
@@ -74,7 +77,7 @@ class _TextWidget extends StatelessWidget {
                 ),
               ),
             ),
-            _SendPost(_textController),
+            _SendPostButton(_textController),
           ],
         ),
       ),
@@ -82,10 +85,11 @@ class _TextWidget extends StatelessWidget {
   }
 }
 
-class _SendPost extends StatelessWidget {
+/// Button which sends written post.
+class _SendPostButton extends StatelessWidget {
   final TextEditingController _textController;
 
-  _SendPost(this._textController);
+  _SendPostButton(this._textController);
 
   _sendPost(RunMutation sendPost, BuildContext context) {
     if (_textController.text.length > 0) {

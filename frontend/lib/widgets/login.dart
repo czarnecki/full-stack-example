@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/common/secure_storage.dart';
 
 import '../common/auth.dart' as auth;
 
@@ -85,10 +84,7 @@ class _LoginState extends State<Login> {
 
   _login(BuildContext context) async {
     if (_formKey.currentState.validate()) {
-      await storage.write(key: 'username', value: _username.text);
-      await storage.write(key: 'password', value: _password.text);
-
-      var loggedIn = await auth.login();
+      var loggedIn = await auth.login(_username.text, _password.text);
       if (loggedIn) {
         Navigator.pushReplacementNamed(context, '/home');
       } else {

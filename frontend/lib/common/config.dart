@@ -3,5 +3,3 @@ const keycloakUri =
 const clientId = 'example-frontend';
 const grantType = 'password';
 const graphQlApiUri = 'http://10.0.2.2:8080/graphql';
-String username = '';
-String password = '';

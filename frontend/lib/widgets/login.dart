@@ -14,12 +14,25 @@ class _LoginState extends State<Login> {
   final TextEditingController _username = TextEditingController();
   final TextEditingController _password = TextEditingController();
 
-  final fieldDecoration = (String hint) => InputDecoration(
+  static final _fieldDecoration = (String hint) => InputDecoration(
         hintText: hint,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(32.0),
         ),
       );
+
+  static final _loginField =
+      (String label, TextEditingController controller, bool obscure) => Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextFormField(
+              controller: controller,
+              validator: (value) {
+                return value.isEmpty ? '$label cannot be empty' : null;
+              },
+              decoration: _fieldDecoration(label),
+              obscureText: obscure,
+            ),
+          );
 
   @override
   Widget build(BuildContext context) {
@@ -36,31 +49,8 @@ class _LoginState extends State<Login> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      controller: _username,
-                      validator: (value) {
-                        return value.isEmpty
-                            ? 'Username cannot be empty'
-                            : null;
-                      },
-                      decoration: fieldDecoration('Username'),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      controller: _password,
-                      obscureText: true,
-                      validator: (value) {
-                        return value.isEmpty
-                            ? 'Password cannot be empty'
-                            : null;
-                      },
-                      decoration: fieldDecoration('Password'),
-                    ),
-                  ),
+                  _loginField('Username', _username, false),
+                  _loginField('Password', _password, true),
                   ButtonTheme(
                     minWidth: 200,
                     child: FlatButton(

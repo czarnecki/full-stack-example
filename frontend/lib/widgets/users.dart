@@ -30,7 +30,9 @@ class UserList extends StatelessWidget {
           },
           separatorBuilder: (BuildContext context, int index) {
             return Divider(
-              color: Colors.black,
+              indent: 50,
+              endIndent: 50,
+              color: Theme.of(context).colorScheme.onSurface,
             );
           },
         );
@@ -70,9 +72,11 @@ class _Follow extends StatelessWidget {
           trailing: _userItem.isFollowing
               ? const Icon(
                   FontAwesomeIcons.asterisk,
-                  color: Colors.orange,
+                  color: Colors.blue,
                 )
-              : const Icon(FontAwesomeIcons.asterisk),
+              : const Icon(
+                  FontAwesomeIcons.asterisk,
+                ),
           onTap: () => toggleFollow({
             'followedUserUsername': _userItem.user.username,
           }),

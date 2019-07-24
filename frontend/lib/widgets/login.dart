@@ -59,7 +59,7 @@ class _LoginState extends State<Login> {
                         _login(context);
                       },
                       color: Theme.of(context).primaryColor,
-                      textColor: Theme.of(context).secondaryHeaderColor,
+                      textColor: Theme.of(context).textTheme.body1.color,
                       child: Text('Login'),
                     ),
                   )

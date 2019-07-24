@@ -42,6 +42,10 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'FSE Frontend App',
       home: _defaultHome,
+      theme: ThemeData(
+        primarySwatch: Colors.teal,
+      ),
+      darkTheme: ThemeData.dark(),
       routes: {
         '/home': (BuildContext context) => Home(),
         '/login': (BuildContext context) => Login(),

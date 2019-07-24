@@ -69,7 +69,7 @@ class _TextWidget extends StatelessWidget {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(32.0),
                   ),
-                  fillColor: Colors.white,
+                  fillColor: Theme.of(context).colorScheme.surface,
                   filled: true,
                 ),
               ),
@@ -103,11 +103,11 @@ class _SendPost extends StatelessWidget {
           onPressed: () => _sendPost(sendPost, context),
           child: Icon(
             Icons.send,
-            color: Colors.white,
+            color: Theme.of(context).buttonTheme.colorScheme.onSecondary,
           ),
           materialTapTargetSize: MaterialTapTargetSize.padded,
           shape: CircleBorder(),
-          fillColor: Colors.blue,
+          fillColor: Theme.of(context).buttonTheme.colorScheme.secondary,
           constraints: BoxConstraints(),
           elevation: 0,
           padding: EdgeInsets.all(15),

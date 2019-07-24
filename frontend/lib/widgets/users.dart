@@ -57,18 +57,12 @@ class _Follow extends StatelessWidget {
         return ListTile(
           title: Row(
             children: <Widget>[
-              Text('${_userItem.user.givenName} ${_userItem.user.familyName}'),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: Text(
-                  '${_userItem.user.handle}',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              )
+              Text(
+                '${_userItem.user.givenName} ${_userItem.user.familyName}',
+              ),
             ],
           ),
+          subtitle: Text(_userItem.user.handle),
           trailing: _userItem.isFollowing
               ? const Icon(
                   FontAwesomeIcons.asterisk,

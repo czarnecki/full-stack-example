@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 import '../domain/domain.dart' as domain;
@@ -58,7 +59,7 @@ class _Follow extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: Text(
-                  '\$${_userItem.user.username}',
+                  '${_userItem.user.handle}',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
@@ -68,10 +69,10 @@ class _Follow extends StatelessWidget {
           ),
           trailing: _userItem.isFollowing
               ? const Icon(
-                  Icons.star,
-                  color: Colors.amber,
+                  FontAwesomeIcons.asterisk,
+                  color: Colors.orange,
                 )
-              : const Icon(Icons.star_border),
+              : const Icon(FontAwesomeIcons.asterisk),
           onTap: () => toggleFollow({
             'followedUserUsername': _userItem.user.username,
           }),

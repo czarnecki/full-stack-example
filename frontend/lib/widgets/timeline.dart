@@ -87,7 +87,7 @@ class _TimelineCard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Text(
-                      '\$${_timelineItem.user.username}',
+                      '${_timelineItem.user.handle}',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),

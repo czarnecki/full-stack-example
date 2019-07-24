@@ -4,6 +4,7 @@ class User {
   final String familyName;
 
   get fullName => '$givenName $familyName';
+  get handle => '&$username';
 
   User._(this.username, this.givenName, this.familyName);
 

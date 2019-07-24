@@ -94,7 +94,7 @@ class _LoginState extends State<Login> {
       } else {
         Scaffold.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error loggin in'),
+            content: Text('Error logging in'),
             action: SnackBarAction(
                 label: 'Close',
                 onPressed: () => Scaffold.of(context).removeCurrentSnackBar()),

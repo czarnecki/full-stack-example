@@ -28,6 +28,6 @@ constructor(private val getCurrentlyLoggedInUserPort: GetCurrentlyLoggedInUserPo
             throw NotFollowingException("Can't unfollow, because user with ID \"${following.id}\" isn't following user with ID \"${followed.id}\".")
 
         unfollowUserPort.unfollowUser(following, followed)
-        return UnfollowUserPayload(User(following.username, following.givenName, following.familyName), User(followed.username, followed.givenName, followed.familyName))
+        return UnfollowUserPayload(User(following.username, following.givenName, following.familyName), User(followed.username, followed.givenName, followed.familyName), true)
     }
 }

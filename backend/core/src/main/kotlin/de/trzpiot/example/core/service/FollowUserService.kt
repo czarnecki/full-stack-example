@@ -29,6 +29,6 @@ constructor(
             throw AlreadyFollowingException("User with ID \"${following.id}\" is already following user with ID \"${followed.id}\".")
 
         followUserPort.followUser(following, followed)
-        return FollowUserPayload(User(following.username, following.givenName, following.familyName), User(followed.username, followed.givenName, followed.familyName))
+        return FollowUserPayload(User(following.username, following.givenName, following.familyName), User(followed.username, followed.givenName, followed.familyName), true)
     }
 }

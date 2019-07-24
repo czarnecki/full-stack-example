@@ -65,11 +65,13 @@ type PostMessagePayload {
 type FollowUserPayload {
     following: User
     followed: User
+    isFollowing: Boolean
 }
 
 type UnfollowUserPayload {
     following: User
     followed: User
+    isFollowing: Boolean
 }
 
 type GetTimelineFromUserPayload {

@@ -17,9 +17,12 @@ class Post extends StatelessWidget {
           PageRouteBuilder(
             opaque: false,
             pageBuilder: (BuildContext context, _, __) {
-              return BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                child: _PostField(),
+              return GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                  child: _PostField(),
+                ),
               );
             },
           ),

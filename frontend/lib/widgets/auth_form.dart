@@ -3,14 +3,7 @@ import 'package:flutter/material.dart';
 import '../common/auth.dart' as auth;
 
 /// Widget that provides form for credentials
-class AuthForm extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return _AuthFormState();
-  }
-}
-
-class _AuthFormState extends State<AuthForm> {
+class AuthForm extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey();
   final TextEditingController _username = TextEditingController();
   final TextEditingController _password = TextEditingController();

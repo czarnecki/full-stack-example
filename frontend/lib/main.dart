@@ -10,7 +10,7 @@ main() async {
   var authenticated = await auth.authenticate();
 
   // Set default home based on result of authentication
-  var defaultHome = authenticated ? Home() : AuthForm();
+  var startPage = authenticated ? Home() : AuthForm();
 
   // Initial setup for GraphQL client to work with in all views
   final AuthLink authLink = AuthLink(
@@ -30,21 +30,21 @@ main() async {
   runApp(
     GraphQLProvider(
       client: client,
-      child: App(defaultHome),
+      child: App(startPage),
     ),
   );
 }
 
 class App extends StatelessWidget {
-  final Widget _defaultHome;
+  final Widget _startPage;
 
-  App(this._defaultHome);
+  App(this._startPage);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'FSE Frontend App',
-      home: _defaultHome,
+      home: _startPage,
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),

@@ -32,7 +32,7 @@ class Post extends StatelessWidget {
             SnackBar(
               content: error
                   ? Text('There was an error sending your post')
-                  : Text('Post send sucesfully'),
+                  : Text('Post send successfully'),
               behavior: SnackBarBehavior.floating,
               action: SnackBarAction(
                 label: 'Close',

@@ -39,7 +39,7 @@ class AuthForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Authenticate'),
+        title: Text('Authentication'),
       ),
       body: Builder(
         builder: (BuildContext context) {
@@ -61,7 +61,7 @@ class AuthForm extends StatelessWidget {
                       },
                       color: Theme.of(context).primaryColor,
                       textColor: Theme.of(context).textTheme.body1.color,
-                      child: Text('Login'),
+                      child: Text('Authenticate'),
                     ),
                   )
                 ],
@@ -86,7 +86,7 @@ class AuthForm extends StatelessWidget {
       } else {
         Scaffold.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error authenticating'),
+            content: Text('Error during authentication'),
             action: SnackBarAction(
               label: 'Close',
               onPressed: () => Scaffold.of(context).removeCurrentSnackBar(),

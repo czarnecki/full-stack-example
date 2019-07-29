@@ -1,4 +1,4 @@
-const String getTimeline = r'''
+const String getTimelineWithCurrentUser = r'''
 query GetTimeLine {
   action: getTimelineFromUser {
     timeline {
@@ -17,6 +17,11 @@ query GetTimeLine {
       username
       givenName
       familyName
+    }
+  }
+  currentUser: getCurrentlyLoggedInUser {
+    user {
+      username
     }
   }
 }

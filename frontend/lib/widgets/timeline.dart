@@ -11,7 +11,7 @@ class Timeline extends StatelessWidget {
   Widget build(BuildContext context) {
     return Query(
       options: QueryOptions(
-        document: query.getTimeline,
+        document: query.getTimelineWithCurrentUser,
         pollInterval: 60,
       ),
       builder: (QueryResult result, {BoolCallback refetch}) {
@@ -43,11 +43,12 @@ class _TimelineList extends StatelessWidget {
       );
     }
     var timeline = domain.Timeline.fromQuery(result.data);
+    var username = domain.User.fromQuery(result.data['currentUser']).username;
     return ListView.builder(
       physics: BouncingScrollPhysics(),
       itemCount: timeline.length,
       itemBuilder: (context, index) {
-        return _TimelinePost(timeline[index]);
+        return _TimelinePost(timeline[index], username);
       },
     );
   }
@@ -55,12 +56,30 @@ class _TimelineList extends StatelessWidget {
 
 /// Widget that presents a single post
 class _TimelinePost extends StatelessWidget {
+  // The username of the logged in user
+  final String _username;
   final domain.TimelineItem _timelineItem;
 
-  _TimelinePost(this._timelineItem);
+  _TimelinePost(this._timelineItem, this._username);
 
   String _toTimeAndDate(DateTime dateTime) {
     return '${DateFormat.yMd().format(dateTime)} ${DateFormat.Hm().format(dateTime)}';
+  }
+
+  get isOwn => _username == _timelineItem.user.username;
+
+  BorderRadius cardBorder() {
+    return isOwn
+        ? BorderRadius.only(
+            topLeft: Radius.circular(10),
+            bottomLeft: Radius.circular(10),
+            bottomRight: Radius.circular(10),
+          )
+        : BorderRadius.only(
+            topRight: Radius.circular(10),
+            bottomLeft: Radius.circular(10),
+            bottomRight: Radius.circular(10),
+          );
   }
 
   @override
@@ -70,8 +89,9 @@ class _TimelinePost extends StatelessWidget {
         horizontal: 8.0,
         vertical: 5.0,
       ),
+      color: isOwn ? Theme.of(context).primaryColorLight : null,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5.5),
+        borderRadius: cardBorder(),
       ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),

@@ -7,6 +7,12 @@ import '../operations/queries/queries.dart' as query;
 
 /// Widget which shows posts written by followed users and the user themselves.
 class Timeline extends StatelessWidget {
+  final ScrollController _scrollController = ScrollController();
+
+  void backToTop() {
+    _scrollController.jumpTo(0);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Query(
@@ -16,7 +22,27 @@ class Timeline extends StatelessWidget {
       ),
       builder: (QueryResult result, {BoolCallback refetch}) {
         return RefreshIndicator(
-          child: _TimelineList(result),
+          child: Stack(
+            children: [
+              _TimelineList(result, _scrollController),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  alignment: Alignment.bottomRight,
+                  child: RawMaterialButton(
+                    onPressed: backToTop,
+                    fillColor: Theme.of(context).colorScheme.secondary,
+                    constraints: BoxConstraints(),
+                    child: Icon(
+                      Icons.keyboard_arrow_up,
+                      size: 48,
+                      color: Theme.of(context).colorScheme.onSecondary,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
           onRefresh: () async {
             refetch();
           },
@@ -29,8 +55,9 @@ class Timeline extends StatelessWidget {
 /// The widget that builds the timeline
 class _TimelineList extends StatelessWidget {
   final QueryResult result;
+  final ScrollController _scrollController;
 
-  _TimelineList(this.result);
+  _TimelineList(this.result, this._scrollController);
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +72,7 @@ class _TimelineList extends StatelessWidget {
     var timeline = domain.Timeline.fromQuery(result.data);
     var username = domain.User.fromQuery(result.data['currentUser']).username;
     return ListView.builder(
+      controller: _scrollController,
       physics: BouncingScrollPhysics(),
       itemCount: timeline.length,
       itemBuilder: (context, index) {

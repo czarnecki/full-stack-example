@@ -9,14 +9,6 @@ import '../operations/queries/queries.dart' as query;
 class Timeline extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return _TimelineQuery();
-  }
-}
-
-/// Widget which sets up the Query ability to refresh the list
-class _TimelineQuery extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
     return Query(
       options: QueryOptions(
         document: query.getTimeline,
@@ -66,6 +58,10 @@ class _TimelinePost extends StatelessWidget {
   final domain.TimelineItem _timelineItem;
 
   _TimelinePost(this._timelineItem);
+
+  String _toTimeAndDate(DateTime dateTime) {
+    return '${DateFormat.yMd().format(dateTime)} ${DateFormat.Hm().format(dateTime)}';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -117,8 +113,7 @@ class _TimelinePost extends StatelessWidget {
             Container(
               alignment: FractionalOffset.centerRight,
               child: Text(
-                DateFormat.yMMMEd()
-                    .format(_timelineItem.post.creationDate.toLocal()),
+                _toTimeAndDate(_timelineItem.post.creationDate),
                 style: TextStyle(
                   fontStyle: FontStyle.italic,
                 ),
